@@ -1,6 +1,7 @@
 import express, { urlencoded } from "express";
 import multer from "multer";
 import fs from "node:fs";
+import cors from "cors";
 import {
   parseCSVFile,
   groupCSVRowsByGender,
@@ -9,7 +10,7 @@ import {
   clearMulterUploadDir,
 } from "./utils";
 
-const PORT = 3000;
+const PORT = 4000;
 const MULTER_UPLOAD_DEST = "_uploads";
 
 const app = express();
@@ -17,6 +18,7 @@ const upload = multer({ dest: MULTER_UPLOAD_DEST });
 
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
+app.use(cors({ origin: "http://localhost:3000" }));
 
 app.post("/upload_csv", upload.single("file"), async (req, res) => {
   try {
