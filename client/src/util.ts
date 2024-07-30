@@ -7,19 +7,10 @@ export enum TransactionStatus {
 }
 
 export const usePostCSVFile = () => {
+  const [error, setError] = useState<boolean>(false);
   const [status, setStatus] = useState<TransactionStatus>(
     TransactionStatus.IDLE
   );
-
-  const triggerSavefile = (blob: Blob) => {
-    const href = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = href;
-    link.setAttribute("download", "data.zip");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   const observeDownload = async (response: Response) => {
     const reader = response.clone().body?.getReader();
@@ -29,6 +20,20 @@ export const usePostCSVFile = () => {
         if (done) return response.clone().blob();
       }
     }
+  };
+
+  const triggerSavefile = (blob: Blob, filename: string) => {
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute("download", `${filename.split(".")[0]}.zip`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleReset = () => {
+    setError(false);
+    setStatus(TransactionStatus.IDLE);
   };
 
   const submit = async (file: File) => {
@@ -46,14 +51,17 @@ export const usePostCSVFile = () => {
       .then((blob) => {
         if (blob) {
           setStatus(TransactionStatus.IDLE);
-          triggerSavefile(blob);
+          triggerSavefile(blob, file.name);
         }
       })
       .catch((error) => {
         console.log(error);
-        setStatus(TransactionStatus.IDLE);
+        setTimeout(() => {
+          setStatus(TransactionStatus.IDLE);
+          setError(true);
+        }, 500);
       });
   };
 
-  return { submit, status };
+  return { submit, status, error, reset: handleReset };
 };

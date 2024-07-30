@@ -1,0 +1,22 @@
+:root {
+  --white: #ffffff;
+  --grey-100: #f7f7f7;
+  --grey-400: #c7cfd7;
+  --grey-500: #869098;
+  --grey-700: #202020;
+  --grey-900: #000000;
+  --primary-200: #625df5;
+  --danger-200: #f84f4f;
+
+  --font-1: Inter, Helvetica, sans-serif;
+  --font-2: Aeonik, Helvetica, Arial, sans-serif;
+  --light: 300;
+  --regular: 400;
+  --medium: 500;
+  --semibold: 600;
+
+  --border-radius-medium: 8px;
+  --border-radius-large: 12px;
+
+  --shadow-regular: 0 4px 8px -2px rgba(45, 45, 45, 0.295);
+}
