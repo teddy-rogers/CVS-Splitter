@@ -1,6 +1,5 @@
 import "./App.css";
-import BackGroundImage from "./2.jpg";
-import PlanityLogo from "./planity.svg";
+import BackGroundImage from "./app-background.jpg";
 import { ChangeEvent, useState } from "react";
 import { TransactionStatus, usePostCSVFile } from "./util";
 
@@ -29,9 +28,8 @@ function App() {
       style={{ backgroundImage: `url(${BackGroundImage})` }}
     >
       <div
-        className="planity-logo"
-        style={{ backgroundImage: `url(${PlanityLogo})` }}
-      />
+        className="schedulity-logo"
+      >SCHEDULITY</div>
 
       <div className="csv-form-container">
         <div className="csv-form-title">

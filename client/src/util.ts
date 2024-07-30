@@ -40,27 +40,23 @@ export const usePostCSVFile = () => {
     setStatus(TransactionStatus.SENDING);
     const formData = new FormData();
     formData.append("file", file);
-    fetch("http://localhost:4000/upload_csv", {
+    const response = await fetch("http://localhost:4000/upload_csv", {
       method: "POST",
       body: formData,
-    })
-      .then(async (res) => {
-        setStatus(TransactionStatus.RECEIVING);
-        return await observeDownload(res);
-      })
-      .then((blob) => {
-        if (blob) {
-          setStatus(TransactionStatus.IDLE);
-          triggerSavefile(blob, file.name);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        setTimeout(() => {
-          setStatus(TransactionStatus.IDLE);
-          setError(true);
-        }, 500);
-      });
+    }).then(async (res) => {
+      setStatus(TransactionStatus.RECEIVING);
+      return res;
+    });
+    if (response.ok) {
+      const blob = await observeDownload(response);
+      setStatus(TransactionStatus.IDLE);
+      blob && triggerSavefile(blob, file.name);
+    } else {
+      setTimeout(() => {
+        setStatus(TransactionStatus.IDLE);
+        setError(true);
+      }, 500);
+    }
   };
 
   return { submit, status, error, reset: handleReset };
